@@ -1,9 +1,15 @@
-# 1. import Flask
+# Step 1. import Flask
 from flask import Flask
 
-# 2. Create an app, being sure to pass __name__
+# Step 7b. 
+from sqlalchemy import create_engine, func, inspect
+
+
+# Step 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
 
+# Stp 7a.
+engine = create_engine('sqlite:///Resources/hawaii.sqlite')
 
 # Step 5  Define what to do when a user hits the index route
 @app.route("/")
@@ -21,6 +27,6 @@ def about():
 
 
 
-# Step 3
+# Step 3. 
 if __name__ == "__main__":
     app.run(debug=True)
