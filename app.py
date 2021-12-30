@@ -14,14 +14,24 @@ app = Flask(__name__)
 
 # Step 7a.
 engine = create_engine('sqlite:///Resources/hawaii.sqlite')
+
+
+#########################
 # Step 8 Set up data base
+#########################
  # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
 
+# Save reference to the tables
+Measurement = Base.classes.measurement
+Station = Base.classes.station
 
+
+############################################################################################
 # Step 5 FLASK Routes 1st INDEX ROUTE... Define what to do when a user hits the index route
+############################################################################################
 @app.route("/")
 def home():
     print("Server received request for 'Home' page...")
