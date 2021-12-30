@@ -8,6 +8,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+import numpy as np
 
 # Step 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
@@ -36,7 +37,7 @@ Station = Base.classes.station
 def home():
     print("Server received request for 'Home' page...")
     return (
-        f"Welcome to Surf's Up Climate App API!<br>"
+        f"Home<br>"
         f"Available Routes:<br/>"
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br>"
@@ -44,7 +45,22 @@ def home():
         f"/api/v1.0/<start><br/>"
         f"/api/v1.0/<start>/<end><br/>"
     )
+##########################################################
+#PRECIPITATION Data
+##########################################################
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
+       # Query all precipitation
+    results = session.query(Measurement.date, Measurement.prcp, Measurement.station).all()
+    
+    session.close()
+
+     # Convert list of tuples into normal list
+    preicpData = list(np.ravel(results))
+    return jsonify(preicpData)
 
 # Step 6 Define what to do when a user hits the /about route
 @app.route("/about")
