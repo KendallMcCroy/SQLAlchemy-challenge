@@ -58,9 +58,18 @@ def precipitation():
     
     session.close()
 
+    all_precipitation = []
+    # for date, in Measurement:
+    for result in results:
+        # if prcp  != None:
+            precip_dict = {}
+            precip_dict = {result.date: result.prcp, "Station": result.station}
+            # precip_dict["date"] = date
+            all_precipitation.append(precip_dict)
+           
      # Convert list of tuples into normal list
-    preicpData = list(np.ravel(results))
-    return jsonify(preicpData)
+    # all_precipitation = list(np.ravel(results))
+    return jsonify(all_precipitation)
 
 ################################################
 #Station
