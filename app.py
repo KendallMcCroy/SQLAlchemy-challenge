@@ -4,14 +4,22 @@
 from flask import Flask, jsonify
 
 # Step 7b. 
-from sqlalchemy import create_engine, func, inspect
-
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
 
 # Step 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
 
-# Stp 7a.
+# Step 7a.
 engine = create_engine('sqlite:///Resources/hawaii.sqlite')
+# Step 8 Set up data base
+ # reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
 
 # Step 5 FLASK Routes 1st INDEX ROUTE... Define what to do when a user hits the index route
 @app.route("/")
