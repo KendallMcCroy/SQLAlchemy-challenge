@@ -42,7 +42,7 @@ def home():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start><br/>"
+        f"/api/v1.0/start<br/>"
         f"/api/v1.0/<start>/<end><br/>"
     )
 ##########################################################
@@ -61,14 +61,11 @@ def precipitation():
     all_precipitation = []
     # for date, in Measurement:
     for result in results:
-        # if prcp  != None:
             precip_dict = {}
             precip_dict = {result.date: result.prcp, "Station": result.station}
-            # precip_dict["date"] = date
             all_precipitation.append(precip_dict)
            
      # Convert list of tuples into normal list
-    # all_precipitation = list(np.ravel(results))
     return jsonify(all_precipitation)
 
 ################################################
@@ -96,11 +93,51 @@ def stations():
 
         return jsonify(all_stations)
 
-# Step 6 Define what to do when a user hits the /about route
-@app.route("/about")
-def about():
-    print("Server received request for 'About' page...")
-    return "Welcome to my 'About' page!"
+###############################################
+# Tobs 
+###############################################
+
+###############################################
+# Start Date list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range
+###############################################
+
+
+@app.route("/api/v1.0/start")
+def start_date():
+
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    #
+    sel = [Measurement.date, func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+
+    results = (session.query(*sel))
+                   
+    session.close()
+
+    start_date = []
+    for result in results:
+        date_dict = {}
+        date_dict["Date"] = result[0]
+        date_dict["Low Temp"] = result[1]
+        date_dict["Avg Temp"] = result[2]
+        date_dict["High Temp"] = result[3]
+        start_date.append(date_dict)
+        
+        return jsonify(start_date)
+
+
+###############################################
+# Start/End Date
+# ###############################################
+# @app.route("/api/v1.0/start/end")
+# def ():
+#     # Create our session (link) from Python to the DB
+#     session = Session(engine)
+
+#        # Query all 
+#     results = session.query(Measurement.date, Measurement.prcp, Measurement.station).all()
+    
+#     session.close()
 
 
 
